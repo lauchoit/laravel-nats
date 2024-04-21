@@ -27,11 +27,17 @@ class NatsSub extends Command
         $routes = include base_path('routes/nats.php');
         $natsServices = [];
         foreach ($routes as $route) {
+            $natsService = new NatsService();
             $queue = $route[0];
+            if (is_callable($route[1])) {
+                $natsService->subscribe($queue, $route[1]);
+                $natsServices[] = $natsService;
+                $this->info("Subscribed to queue: $queue");
+                continue;
+            }
+
             $controller = $route[1][0];
             $method = $route[1][1];
-
-            $natsService = new NatsService();
             $natsService->subscribe($queue, function ($payload) use ($controller, $method) {
                 (new $controller())->$method($payload);
             });

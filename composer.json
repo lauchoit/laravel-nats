@@ -37,5 +37,10 @@
             ]
         }
     },
+    "scripts": {
+        "post-create-project-cmd": [
+            "@php artisan vendor:publish --provider=\"Lauchoit\\LaravelNats\\NatsServiceProvider"
+        ]
+    },
     "minimum-stability": "dev"
 }

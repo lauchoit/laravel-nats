@@ -1,6 +1,6 @@
 <?php
 return [
-    'host' => 'nats-server',
+    'host' => 'localhost',
     'jwt' => null,
     'lang' => 'php',
     'pass' => null,
