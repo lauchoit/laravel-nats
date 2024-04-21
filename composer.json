@@ -1,0 +1,41 @@
+{
+    "name": "lauchoit/laravel-nats",
+    "description": "Integration package for Laravel that enables effective communication with NATS, facilitating both sending and listening to real-time events.",
+    "type": "library",
+    "version": "0.1.0",
+    "require": {
+        "php": "^8.0|^8.1|^8.2|^8.3",
+        "laravel/framework": "^10.0|^11.0",
+        "basis-company/nats": "^0.22.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Lauchoit\\LaravelNats\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "LauchoIT",
+            "email": "contacto@lauchoit.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Lauchoit\\LaravelNats\\NatsServiceProvider"
+            ],
+            "commands": [
+                "Lauchoit\\LaravelNats\\Commands\\NatsSub"
+            ]
+        }
+    },
+    "minimum-stability": "dev"
+}
