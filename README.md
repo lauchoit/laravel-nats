@@ -2,20 +2,20 @@
 
 # Laravel NATS Integration / Integración de Laravel con NATS
 
-## Description / Descripción
+## Description
 This package, `lauchoit/laravel-nats`, facilitates integration with NATS, enabling effective real-time communication in Laravel applications through both publishing and listening to events.
 
-## Requirements / Requisitos
+## Requirements
 - PHP 8.0 or higher / PHP 8.0 o superior.
 - Laravel 10.0 or higher / Laravel 10.0 o superior.
 - An operational and accessible NATS instance / Una instancia de NATS ejecutándose y accesible.
 
-## Installation / Instalación
+## Installation
 To install the package, use Composer / Para instalar el paquete, utiliza Composer:
 ```bash
 composer require lauchoit/laravel-nats
 ```
-## Publish the configuration file / Publicar el archivo de configuración
+## Publish the configuration file
 ```bash
 php artisan vendor:publish --provider="Lauchoit\\LaravelNats\\NatsServiceProvider"
 ```
@@ -28,10 +28,10 @@ To initiate the event listening startup, you need to run the command
 ```bash 
 php artisan nats:subscriber
 ```
-In the terminal. This command will start the process of listening to events defined within the file `routes/nats.php`.
+This command will start the process of listening to events defined within the file `routes/nats.php`.
 
-## Example / Ejemplo
-### Listening to a job queue / Escuchando una cola de trabajos
+## Examples
+### Listening to a job queue
   - Inside the file routes/nats.php, add the following:
 ```php
 <?php
@@ -48,7 +48,7 @@ return [
 ```
 - The `subscribe` method receives two parameters: the name of the job queue and Controller and method as an array to execute.
 
-### Publishing a job queue / Publicando una cola de trabajos
+### Publishing a job queue
 - To publish any event, you have to use the publish method:
 ```php
 <?php
