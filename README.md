@@ -90,10 +90,11 @@ and then execute: `nodemon --watch app --watch config --watch routes -e php --ex
 instead of just using `php artisan nats:subscriber`,
 This will listen for changes in the `app`, `config`, and `routes` folders.
 
-### using with docker (or sail)
+### Using with docker (or sail)
 - If you are using docker, you can install nodemon in the container :
 
-    Putting the following command `RUN npm install -g nodemon` before the line that exposes port EXPOSE XXXX.
+    Putting the following command `RUN npm install -g nodemon` before the line that exposes port EXPOSE XXXX in `Dockefile`:
+
 
     After the system is up, you can enter it and execute the previously described
     command `nodemon --watch app --watch config --watch routes -e php --exec php artisan nats:subscriber`.
