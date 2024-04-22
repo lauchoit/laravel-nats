@@ -3,13 +3,15 @@
 # Laravel NATS Integration
 
 ## Description
+<div style="text-align: justify;">
 The laravel-nats package serves as an essential tool for integrating the power of NATS into your Laravel applications, enabling effective real-time communication through event publishing and listening.
-
 With laravel-nats, your Laravel application becomes an agile and powerful platform capable of handling massive amounts of requests without sacrificing speed or efficiency. NATS' robustness combines with Laravel's flexibility, offering a development ecosystem that enhances the scalability and performance of your applications.
 
 This package not only simplifies integration with NATS but also provides an abstraction layer that facilitates event publishing and subscription, allowing you to focus on your application's business logic without worrying about implementation details.
 
 Some key features of laravel-nats include:
+</div>
+
 
 - **Real-Time Communication:** NATS provides ultra-fast and efficient communication, allowing your applications to respond in real-time to events and updates.
 - **Scalability**: Thanks to NATS' lightweight and distributed architecture, your application can handle a large number of concurrent requests without sacrificing performance.
@@ -17,7 +19,6 @@ Some key features of laravel-nats include:
 - **Adaptability**: This package seamlessly integrates with Laravel's native features, allowing you to leverage the full potential of the framework while incorporating NATS' power into your applications.     
 
 **In summary**, laravel-nats not only simplifies the integration of NATS into your Laravel applications but also opens up a world of possibilities in terms of real-time communication and efficient request handling. If you're looking to take your application to the next level in terms of performance and scalability, laravel-nats is the tool you need.
-
 ## Requirements
 - PHP 8.0 or higher.
 - Laravel 10.0 or higher.
