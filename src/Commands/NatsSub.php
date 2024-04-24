@@ -2,8 +2,11 @@
 
 namespace Lauchoit\LaravelNats\Commands;
 
-use Lauchoit\LaravelNats\Services\NatsService;
+use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Http\Request;
+use Lauchoit\LaravelNats\Services\NatsService;
+use ReflectionMethod;
 
 class NatsSub extends Command
 {
@@ -37,9 +40,34 @@ class NatsSub extends Command
             }
 
             $controller = $route[1][0];
-            $method = $route[1][1];
-            $natsService->subscribe($queue, function ($payload) use ($controller, $method) {
-                (new $controller())->$method($payload);
+            $functionName = $route[1][1];
+            if (!class_exists($controller)) {
+                throw new Exception("The controller '{$controller}' not exists");
+            }
+            if (!method_exists($controller, $functionName)) {
+                throw new Exception("The method '{$functionName}' not exists in controller '{$controller}'");
+            }
+            $natsService->subscribe($queue, function ($payload) use ($controller, $functionName) {
+
+                $params = json_decode($payload->headers['params'], true);
+                $payload = json_decode($payload->body, true);
+                $newPayload = new Request($payload);
+
+                $reflector = new ReflectionMethod($controller, $functionName);
+                $paramCount = $reflector->getNumberOfParameters();
+
+                if (count($newPayload->all())) {
+
+                    (new $controller())->$functionName($newPayload);
+                    return;
+                }
+
+                if ($paramCount && !count($newPayload->all())) {
+                    (new $controller())->$functionName(...$params);
+                    return;
+                }
+
+
             });
             $natsServices[] = $natsService;
             $this->info("Subscribed to queue: $queue");
@@ -50,4 +78,12 @@ class NatsSub extends Command
             }
         }
     }
+
+//    private function getRequest($payload)
+//    {
+//        $payload = json_decode($payload->body, true);
+//        $request = new Request($payload);
+//
+//        return $request;
+//    }
 }

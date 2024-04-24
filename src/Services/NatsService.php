@@ -15,17 +15,21 @@ class NatsService
         $this->start();
     }
 
-    private function start()
+    private function start(): void
     {
         $this->configuration = new Configuration(config('nats'));
-
         $this->configuration->setDelay(0.01, Configuration::DELAY_EXPONENTIAL);
     }
 
-    public function subscribe($queue, $callback)
+    public function subscribe($queue, $callback): void
     {
         $this->client = new Client($this->configuration);
-
         $this->client->subscribe($queue, $callback);
+    }
+
+    public function publish($queue, $payload): void
+    {
+        $this->client = new Client($this->configuration);
+        $this->client->publish($queue, $payload);
     }
 }

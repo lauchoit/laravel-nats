@@ -45,22 +45,6 @@ php artisan nats:subscriber
 This command will start the process of listening to events defined within the file `routes/nats.php`.
 
 ## Examples
-### Listening to a job queue
-  - Inside the file routes/nats.php, add the following:
-```php
-<?php
-
-namespace Lauchoit\LaravelNats\Console\Commands;
-
-use Lauchoit\LaravelNats\Services\Nats;
-
-// Example: Nats::subscribe('login', [AuthController::class, 'login']),
-return [ 
-    Nats::subscribe('login', [AuthController::class, 'login']),
-];
-
-```
-- The `subscribe` method receives two parameters: the name of the job queue and Controller and method as an array to execute.
 
 ### Publishing a job queue
 - To publish any event, you have to use the publish method:
@@ -83,6 +67,22 @@ class AuthController extends Controller
 ```
 - The `publish` method receives two parameters: the name of the job queue and the payload to be sent.
 
+### Listening to a job queue
+  - Inside the file `routes/nats.php`, add the following:
+```php
+<?php
+
+namespace Lauchoit\LaravelNats\Console\Commands;
+
+use Lauchoit\LaravelNats\Services\Nats;
+
+// Example: Nats::subscribe('login', [AuthController::class, 'login']),
+return [ 
+    Nats::subscribe('login', [AuthController::class, 'login']),
+];
+
+```
+- The `subscribe` method receives two parameters: the name of the job queue and Controller and method as an array to execute.
 ## Developer
 When the `php artisan nats:subscriber` command is executed, the system takes a snapshot and runs it. 
 To reflect the changes, you need to shut it down and re-execute the command. 
@@ -97,8 +97,8 @@ This will listen for changes in the `app`, `config`, and `routes` folders.
     Putting the following command `RUN npm install -g nodemon` before the line that exposes port EXPOSE XXXX in `Dockefile`:
 
 
-    After the system is up, you can enter it and execute the previously described
-    command `nodemon --watch app --watch config --watch routes -e php --exec php artisan nats:subscriber`.
+After the system is up, you can enter it and execute the previously described
+   - command `nodemon --watch app --watch config --watch routes -e php --exec php artisan nats:subscriber`.
 
 ### Up by supervisor
 You can also use the supervisor from docker (or native) to keep the system listener running, by placing in the supervisor:
