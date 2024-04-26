@@ -8,21 +8,26 @@ use Illuminate\Support\Facades\Route;
 
 class Nats
 {
-    public static function subscribe(String $queue, mixed $ControllerMethod): array
+    public static function subscribe(string $queue, mixed $ControllerMethod): array
     {
         return [$queue, $ControllerMethod];
     }
 
-    public static function post(String $queue, Request $request): void
+    public static function post(string $queue, Request $request)
     {
         $method = 'POST';
-        self::getDataSender($request, $queue, $method);
+        return self::getDataSenderAndMethod($request, $queue, $method);
     }
 
-    public static function get(String $queue, string $request): void
+    public static function get(string $queue, string $request): void
     {
         $method = 'GET';
-        self::getDataSender($request, $queue, $method);
+        self::getDataSenderAndMethod($request, $queue, $method);
+    }
+
+    public static function send(string $queue, Request $request, bool $async = false)
+    {
+        return self::getDataSender($request, $queue, $async);
     }
 
     /**
@@ -30,12 +35,26 @@ class Nats
      * @param String $queue
      * @return void
      */
-    public static function getDataSender(mixed $request, string $queue, string $method): void
+    public static function getDataSenderAndMethod(mixed $request, string $queue, string $method)
     {
         $params = Route::current()->parameters();
         $payload = gettype($request) === 'string' ? [] : [...$request->all()];
         $natsService = new NatsService();
         $newPayload = new Payload(json_encode($payload), ['method' => $method, 'params' => json_encode($params)]);
-        $natsService->publish($queue, $newPayload);
+        return $natsService->dispatch($queue, $newPayload);
+    }
+
+    public static function getDataSender(mixed $request, string $queue, $async)
+    {
+        $params = Route::current()->parameters();
+        $payload = gettype($request) === 'string' ? [] : [...$request->all()];
+        $natsService = new NatsService();
+        $newPayload = new Payload(json_encode($payload), ['params' => json_encode($params)]);
+        if (!$async) {
+            return $natsService->dispatch($queue, $newPayload);
+        } else {
+            $natsService->publish($queue, $newPayload);
+            return null;
+        }
     }
 }

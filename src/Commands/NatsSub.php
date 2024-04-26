@@ -49,6 +49,7 @@ class NatsSub extends Command
             }
             $natsService->subscribe($queue, function ($payload) use ($controller, $functionName) {
 
+                $response = null;
                 $params = json_decode($payload->headers['params'], true);
                 $payload = json_decode($payload->body, true);
                 $newPayload = new Request($payload);
@@ -57,33 +58,21 @@ class NatsSub extends Command
                 $paramCount = $reflector->getNumberOfParameters();
 
                 if (count($newPayload->all())) {
-
-                    (new $controller())->$functionName($newPayload);
-                    return;
+                    $response = (new $controller())->$functionName($newPayload);
                 }
 
                 if ($paramCount && !count($newPayload->all())) {
-                    (new $controller())->$functionName(...$params);
-                    return;
+                    $response = (new $controller())->$functionName(...$params);
                 }
-
-
+                return $response;
             });
             $natsServices[] = $natsService;
             $this->info("Subscribed to queue: $queue");
         }
         while (true) {
             foreach ($natsServices as $natsService) {
-                $natsService->client->process();
+                $natsService->client->process(0.1);
             }
         }
     }
-
-//    private function getRequest($payload)
-//    {
-//        $payload = json_decode($payload->body, true);
-//        $request = new Request($payload);
-//
-//        return $request;
-//    }
 }
